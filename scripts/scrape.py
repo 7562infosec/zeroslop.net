@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 zeroslop.net — Daily positive AI & innovation news scraper
-Fetches stories from 17 RSS feeds, filters for breakthrough/innovation content,
+Fetches stories from 40 RSS feeds, filters for breakthrough/innovation content,
 scores by relevance, generates upbeat Claude Haiku summaries, and writes a Jekyll post.
 """
 
@@ -39,28 +39,52 @@ log = logging.getLogger(__name__)
 
 RSS_FEEDS = [
     # ── Core Tech / AI ──────────────────────────────────────────────────────
-    ("The Verge AI",      "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"),
-    ("Ars Technica",      "https://feeds.arstechnica.com/arstechnica/technology-lab"),
-    ("Wired AI",          "https://www.wired.com/feed/tag/ai/latest/rss"),
-    ("MIT Tech Review",   "https://www.technologyreview.com/feed/"),
-    ("VentureBeat AI",    "https://venturebeat.com/category/ai/feed/"),
-    ("TechCrunch AI",     "https://techcrunch.com/category/artificial-intelligence/feed/"),
-    ("Futurism",          "https://futurism.com/feed"),
-    ("The Guardian Tech", "https://www.theguardian.com/technology/rss"),
-    ("NY Times Tech",     "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml"),
-    ("Reuters Tech",      "https://feeds.reuters.com/reuters/technologyNews"),
-    ("404 Media",         "https://www.404media.co/rss/"),
+    ("The Verge AI",         "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"),
+    ("Ars Technica",         "https://feeds.arstechnica.com/arstechnica/technology-lab"),
+    ("Wired AI",             "https://www.wired.com/feed/tag/ai/latest/rss"),
+    ("Wired Security",       "https://www.wired.com/feed/category/security/latest/rss"),
+    ("MIT Tech Review",      "https://www.technologyreview.com/feed/"),
+    ("MIT Tech Review AI",   "https://www.technologyreview.com/topic/artificial-intelligence/feed/"),
+    ("VentureBeat AI",       "https://venturebeat.com/category/ai/feed/"),
+    ("TechCrunch AI",        "https://techcrunch.com/category/artificial-intelligence/feed/"),
+    ("Futurism",             "https://futurism.com/feed"),
+    ("The Guardian Tech",    "https://www.theguardian.com/technology/rss"),
+    ("NY Times Tech",        "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml"),
+    ("Reuters Tech",         "https://feeds.reuters.com/reuters/technologyNews"),
+    ("404 Media",            "https://www.404media.co/rss/"),
+    ("Tom's Hardware",       "https://www.tomshardware.com/rss.xml"),
+    ("Slashdot",             "https://rss.slashdot.org/Slashdot/slashdotMain"),
+    ("It's FOSS",            "https://itsfoss.com/rss/"),
 
     # ── Innovation / Startup / VC ───────────────────────────────────────────
-    ("a16z",              "https://a16z.com/feed/"),
-    ("NVIDIA Blog",       "https://blogs.nvidia.com/feed/"),
-    ("Microsoft AI",      "https://blogs.microsoft.com/ai/feed/"),
+    ("a16z",                 "https://a16z.com/feed/"),
+    ("NVIDIA Blog",          "https://blogs.nvidia.com/feed/"),
+    ("Microsoft AI",         "https://blogs.microsoft.com/ai/feed/"),
+    ("AWS Blog",             "https://aws.amazon.com/blogs/aws/feed/"),
     ("AWS Machine Learning", "https://aws.amazon.com/blogs/machine-learning/feed/"),
+    ("MarkTechPost",         "https://www.marktechpost.com/feed/"),
+    ("Hugging Face Blog",    "https://huggingface.co/blog/feed.xml"),
+    ("arXiv CS.AI",          "https://rss.arxiv.org/rss/cs.AI"),
 
     # ── AI Lab Blogs ────────────────────────────────────────────────────────
-    ("OpenAI News",       "https://openai.com/news/rss.xml"),
-    ("Anthropic News",    "https://www.anthropic.com/rss.xml"),
-    ("Google DeepMind",   "https://deepmind.google/blog/rss.xml"),
+    ("OpenAI News",          "https://openai.com/news/rss.xml"),
+    ("Anthropic News",       "https://www.anthropic.com/rss.xml"),
+    ("Google DeepMind",      "https://deepmind.google/blog/rss.xml"),
+    ("Google AI Blog",       "https://blog.google/technology/ai/rss/"),
+
+    # ── Cybersecurity / AI Security ─────────────────────────────────────────
+    ("AWS Security",         "https://aws.amazon.com/blogs/security/feed/"),
+    ("CISA Alerts",          "https://us-cert.cisa.gov/ncas/alerts.xml"),
+    ("Krebs on Security",    "http://krebsonsecurity.com/feed/"),
+    ("Schneier on Security", "https://www.schneier.com/blog/atom.xml"),
+    ("Recorded Future",      "https://www.recordedfuture.com/feed/"),
+    ("Cisco Security",       "https://blogs.cisco.com/security/feed"),
+    ("Cisco Talos",          "http://feeds.feedburner.com/feedburner/Talos"),
+    ("SecurityWeek",         "http://feeds.feedburner.com/Securityweek"),
+    ("Google Security Blog", "http://googleonlinesecurity.blogspot.com/atom.xml"),
+    ("Darknet Hackers",      "http://feeds.feedburner.com/darknethackers"),
+    ("EFF Updates",          "https://www.eff.org/rss/updates.xml"),
+    ("The Intercept",        "https://theintercept.com/feed/?rss"),
 ]
 
 # ─────────────────────────────────────────────────────────────────────────────
