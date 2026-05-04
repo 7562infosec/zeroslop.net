@@ -26,7 +26,7 @@ Just the good stuff — clearly summarized, every morning.
 
 ## How It Works
 
-ZeroSlop is fully automated. Each day, a Python scraper pulls from 17 RSS feeds across leading tech publications and AI lab blogs. Stories are scored for relevance to innovation and breakthroughs, deduplicated, and then summarized by Claude Haiku. The whole thing runs on GitHub Actions and deploys to GitHub Pages — zero human intervention required.
+ZeroSlop is fully automated. Each day, a Python scraper pulls from 40 RSS feeds across leading tech publications and AI lab blogs. Stories are scored for relevance to innovation and breakthroughs, deduplicated, and then summarized by Claude Haiku. The whole thing runs on GitHub Actions and deploys to GitHub Pages — zero human intervention required.
 
 The feeds we watch include The Verge, Wired, MIT Technology Review, VentureBeat, TechCrunch, Ars Technica, a16z, NVIDIA, Microsoft AI, AWS, OpenAI, Anthropic, and Google DeepMind.
 
