@@ -1,0 +1,52 @@
+name: Daily AI News Digest
+
+on:
+  schedule:
+    - cron: '0 8 * * *'    # 08:00 UTC every day
+  workflow_dispatch:         # allow manual trigger
+
+permissions:
+  contents: write            # needed to push new _posts/ files
+
+jobs:
+  scrape-and-post:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0     # full history so git push works cleanly
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('scripts/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run scraper
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python scripts/scrape.py
+
+      - name: Commit and push new post
+        run: |
+          git config user.name  "zeroslop-bot"
+          git config user.email "bot@zeroslop.net"
+          git add _posts/ scripts/seen_urls.json
+          if git diff --cached --quiet; then
+            echo "Nothing new to commit today."
+          else
+            git commit -m "chore: daily digest $(date -u +%Y-%m-%d)"
+            git push
+          fi
