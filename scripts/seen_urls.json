@@ -22,5 +22,17 @@
   "https://aws.amazon.com/blogs/aws/introducing-anthropics-claude-opus-4-7-model-in-amazon-bedrock/": "2026-05-04",
   "https://arxiv.org/abs/2605.00276": "2026-05-04",
   "https://arxiv.org/abs/2605.00737": "2026-05-04",
-  "http://security.googleblog.com/2025/06/mitigating-prompt-injection-attacks.html": "2026-05-04"
+  "http://security.googleblog.com/2025/06/mitigating-prompt-injection-attacks.html": "2026-05-04",
+  "https://www.technologyreview.com/2026/04/24/1136422/why-deepseeks-v4-matters/": "2026-05-05",
+  "https://blogs.nvidia.com/blog/rtx-ai-garage-open-models-google-gemma-4/": "2026-05-05",
+  "https://aws.amazon.com/blogs/aws/aws-weekly-roundup-anthropic-meta-partnership-aws-lambda-s3-files-amazon-bedrock-agentcore-cli-and-more-april-27-2026/": "2026-05-05",
+  "https://aws.amazon.com/blogs/aws/aws-weekly-roundup-aws-ai-ml-scholars-program-agent-plugin-for-aws-serverless-and-more-march-30-2026/": "2026-05-05",
+  "https://arxiv.org/abs/2605.00060": "2026-05-05",
+  "https://arxiv.org/abs/2605.00425": "2026-05-05",
+  "https://arxiv.org/abs/2605.00742": "2026-05-05",
+  "https://openai.com/index/next-phase-of-microsoft-partnership": "2026-05-05",
+  "https://www.recordedfuture.com/blog/trust-is-a-superpower": "2026-05-05",
+  "http://security.googleblog.com/2025/12/further-hardening-android-gpus.html": "2026-05-05",
+  "http://security.googleblog.com/2025/11/rust-in-android-move-fast-fix-things.html": "2026-05-05",
+  "http://security.googleblog.com/2025/09/accelerating-adoption-of-ai-for.html": "2026-05-05"
 }
