@@ -7,7 +7,9 @@ if [ -f package.json ]; then
 fi
 
 # Install dependencies for shfmt extension
-curl -sS https://webi.sh/shfmt | sh &>/dev/null
+# Install shfmt via apt (available in Ubuntu 22+)
+sudo apt-get install -y shfmt 2>/dev/null || \
+  echo "shfmt not available via apt, skipping"
 
 # Add OMZ plugins
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
