@@ -8,13 +8,11 @@ scores by relevance, generates upbeat Claude Haiku summaries, and writes a Jekyl
 import os
 import json
 import re
-import hashlib
 import logging
 from datetime import datetime, timezone
 from pathlib import Path
 
 import feedparser
-import requests
 from bs4 import BeautifulSoup
 from dateutil import parser as dateparser
 import anthropic
@@ -32,6 +30,29 @@ MIN_SCORE   = 2    # minimum relevance score to include
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 log = logging.getLogger(__name__)
+
+import urllib.parse
+
+def sanitize_url(url: str) -> str:
+    """Accept only http/https URLs; return empty string for anything else."""
+    try:
+        parsed = urllib.parse.urlparse(url.strip())
+        if parsed.scheme not in ("http", "https"):
+            return ""
+        # Reconstruct to normalize
+        return urllib.parse.urlunparse(parsed)
+    except Exception:
+        return ""
+
+def sanitize_text(text: str) -> str:
+    """Strip control chars and escape markdown-sensitive characters in titles/summaries."""
+    if not text:
+        return ""
+    # Remove control characters (except tab/newline)
+    text = "".join(c for c in text if c >= " " or c in "\t\n")
+    # Truncate very long tokens
+    return text[:500]
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # RSS Feeds  (original 12 + innovation-focused additions)
@@ -232,7 +253,7 @@ def build_post(stories: list[dict], date_str: str) -> str:
         lines += [
             f"## {story['source']}",
             "",
-            f"**[{story['title']}]({story['url']})**  ",
+            f"**[{sanitize_text(story['title'])}]({sanitize_url(story['url']) or '#'})**  ",
             story["ai_summary"],
             "",
             "---",
