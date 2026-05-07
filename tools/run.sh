@@ -3,7 +3,6 @@
 # Run jekyll serve and then launch the site
 
 prod=false
-command="bundle exec jekyll s -l"
 host="127.0.0.1"
 
 help() {
@@ -40,15 +39,22 @@ while (($#)); do
   esac
 done
 
-command="$command -H $host"
+# Validate host is a safe hostname/IP
+if [[ ! "$host" =~ ^[a-zA-Z0-9._-]+$ ]]; then
+    echo "Error: invalid host argument"
+    exit 1
+fi
+
+# Build jekyll args as array (no eval)
+jekyll_args=(exec jekyll s -l -H "$host")
 
 if $prod; then
-  command="JEKYLL_ENV=production $command"
+  export JEKYLL_ENV=production
 fi
 
 if [ -e /proc/1/cgroup ] && grep -q docker /proc/1/cgroup; then
-  command="$command --force_polling"
+  jekyll_args+=("--force_polling")
 fi
 
-echo -e "\n> $command\n"
-eval "$command"
+echo -e "\n> bundle ${jekyll_args[*]}\n"
+bundle "${jekyll_args[@]}"
