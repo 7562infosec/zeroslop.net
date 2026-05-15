@@ -54,6 +54,14 @@ def sanitize_text(text: str) -> str:
     return text[:500]
 
 
+def fix_encoding(text: str) -> str:
+    """Fix UTF-8/Latin-1 double-encoding artifacts (e.g. Â· → ·)."""
+    try:
+        return text.encode('latin-1').decode('utf-8')
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        return text
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # RSS Feeds  (original 12 + innovation-focused additions)
 # ─────────────────────────────────────────────────────────────────────────────
@@ -184,13 +192,13 @@ def fetch_feed(name: str, url: str) -> list[dict]:
         feed = feedparser.parse(url, request_headers={"User-Agent": "zeroslop-bot/1.0"})
         for entry in feed.entries[:30]:
             link  = entry.get("link", "")
-            title = entry.get("title", "").strip()
+            title = fix_encoding(entry.get("title", "").strip())
             raw_summary = (
                 entry.get("summary")
                 or entry.get("description")
                 or entry.get("content", [{}])[0].get("value", "")
             )
-            summary = clean_html(raw_summary)
+            summary = fix_encoding(clean_html(raw_summary))
             published = ""
             for field in ("published", "updated", "created"):
                 if hasattr(entry, field):
@@ -247,6 +255,8 @@ def build_post(stories: list[dict], date_str: str) -> str:
         "---",
         "",
         f"*{len(stories)} stories worth knowing about today — AI breakthroughs, launches, and innovations making a difference.*",
+        "",
+        "<!--more-->",
         "",
     ]
     for story in stories:
