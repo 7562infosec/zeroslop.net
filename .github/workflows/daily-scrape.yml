@@ -51,3 +51,14 @@ jobs:
             git commit -m "chore: daily digest $(date -u +%Y-%m-%d)"
             git push
           fi
+
+      - name: Notify on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          gh api repos/${{ github.repository }}/issues \
+            --method POST \
+            -f title="⚠️ Daily scrape failed — $(date -u +%Y-%m-%d)" \
+            -f body="The daily scrape workflow failed. [View run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" \
+            -f 'labels[]=bug' || true
