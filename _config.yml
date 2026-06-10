@@ -29,7 +29,7 @@ timezone: America/New_York
 lang: en
 
 # --------------- Jekyll Build ---------------------
-permalink: /posts/:title/
+permalink: /posts/:year-:month-:day-:title/
 
 # --------------- Pagination -----------------------
 paginate: 10
