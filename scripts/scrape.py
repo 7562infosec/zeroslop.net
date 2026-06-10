@@ -2,7 +2,7 @@
 """
 zeroslop.net — Daily positive AI & innovation news scraper
 Fetches stories from 40 RSS feeds, filters for breakthrough/innovation content,
-scores by relevance, generates upbeat Claude Haiku summaries, and writes a Jekyll post.
+scores by relevance, generates upbeat summaries via GitHub Models, and writes a Jekyll post.
 """
 
 import os
@@ -15,7 +15,7 @@ from pathlib import Path
 import feedparser
 from bs4 import BeautifulSoup
 from dateutil import parser as dateparser
-import anthropic
+from openai import OpenAI
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Configuration
@@ -39,18 +39,15 @@ def sanitize_url(url: str) -> str:
         parsed = urllib.parse.urlparse(url.strip())
         if parsed.scheme not in ("http", "https"):
             return ""
-        # Reconstruct to normalize
         return urllib.parse.urlunparse(parsed)
     except Exception:
         return ""
 
 def sanitize_text(text: str) -> str:
-    """Strip control chars and escape markdown-sensitive characters in titles/summaries."""
+    """Strip control chars and truncate."""
     if not text:
         return ""
-    # Remove control characters (except tab/newline)
     text = "".join(c for c in text if c >= " " or c in "\t\n")
-    # Truncate very long tokens
     return text[:500]
 
 
@@ -67,7 +64,7 @@ def fix_encoding(text: str) -> str:
 # ─────────────────────────────────────────────────────────────────────────────
 
 RSS_FEEDS = [
-    # ── Core Tech / AI ──────────────────────────────────────────────────────
+    # ── Core Tech / AI ────────────────────────────────────────────────────────────
     ("The Verge AI",         "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"),
     ("Ars Technica",         "https://feeds.arstechnica.com/arstechnica/technology-lab"),
     ("Wired AI",             "https://www.wired.com/feed/tag/ai/latest/rss"),
@@ -85,7 +82,7 @@ RSS_FEEDS = [
     ("Slashdot",             "https://rss.slashdot.org/Slashdot/slashdotMain"),
     ("It's FOSS",            "https://itsfoss.com/rss/"),
 
-    # ── Innovation / Startup / VC ───────────────────────────────────────────
+    # ── Innovation / Startup / VC ─────────────────────────────────────────────────────
     ("a16z",                 "https://a16z.com/feed/"),
     ("NVIDIA Blog",          "https://blogs.nvidia.com/feed/"),
     ("Microsoft AI",         "https://blogs.microsoft.com/ai/feed/"),
@@ -95,13 +92,13 @@ RSS_FEEDS = [
     ("Hugging Face Blog",    "https://huggingface.co/blog/feed.xml"),
     ("arXiv CS.AI",          "https://rss.arxiv.org/rss/cs.AI"),
 
-    # ── AI Lab Blogs ────────────────────────────────────────────────────────
+    # ── AI Lab Blogs ──────────────────────────────────────────────────────────────────
     ("OpenAI News",          "https://openai.com/news/rss.xml"),
     ("Anthropic News",       "https://www.anthropic.com/rss.xml"),
     ("Google DeepMind",      "https://deepmind.google/blog/rss.xml"),
     ("Google AI Blog",       "https://blog.google/technology/ai/rss/"),
 
-    # ── Cybersecurity / AI Security ─────────────────────────────────────────
+    # ── Cybersecurity / AI Security ───────────────────────────────────────────────
     ("AWS Security",         "https://aws.amazon.com/blogs/security/feed/"),
     ("CISA Alerts",          "https://us-cert.cisa.gov/ncas/alerts.xml"),
     ("Krebs on Security",    "http://krebsonsecurity.com/feed/"),
@@ -220,31 +217,37 @@ def fetch_feed(name: str, url: str) -> list[dict]:
     return stories
 
 
-def summarize_with_claude(title: str, summary: str, client: anthropic.Anthropic) -> str:
+def summarize_with_llm(title: str, summary: str, client: OpenAI) -> str:
     prompt = (
         f"You are a tech journalist for zeroslop.net — a site that celebrates AI breakthroughs, "
         f"innovation, and technology that makes a positive difference. "
         f"Write a punchy 2–3 sentence summary of this story with an enthusiastic, forward-looking tone. "
         f"Highlight what's exciting, what was achieved, or why it matters. No hype or filler — just clear, "
-        f"energetic writing that makes the reader want to learn more.\n\n"
+        f"energetic writing that makes the reader want to learn more. "
+        f"Do not begin your response with a Markdown heading.\n\n"
         f"Story title: {title}\n\n"
         f"Story excerpt: {summary}\n\n"
         f"Summary:"
     )
     try:
-        message = client.messages.create(
-            model="claude-haiku-4-5-20251001",
+        model = os.environ.get("GITHUB_MODEL", "gpt-4o-mini")
+        response = client.chat.completions.create(
+            model=model,
             max_tokens=200,
             messages=[{"role": "user", "content": prompt}],
         )
-        return message.content[0].text.strip()
+        text = response.choices[0].message.content.strip()
+        # Strip any stray leading markdown headings
+        text = re.sub(r'^#{1,6}\s+.*\n?', '', text, flags=re.MULTILINE).strip()
+        return text
     except Exception as e:
-        log.warning(f"Claude summary failed: {e}")
+        log.warning(f"LLM summary failed: {e}")
         return summary[:300] + "..."
 
 
 def build_post(stories: list[dict], date_str: str) -> str:
-    today_display = datetime.strptime(date_str, "%Y-%m-%d").strftime("%B %-d, %Y")
+    d = datetime.strptime(date_str, "%Y-%m-%d")
+    today_display = d.strftime("%B ") + str(d.day) + ", " + str(d.year)
     lines = [
         "---",
         "layout: post",
@@ -259,16 +262,16 @@ def build_post(stories: list[dict], date_str: str) -> str:
         "<!--more-->",
         "",
     ]
-    for story in stories:
+    for i, story in enumerate(stories):
         lines += [
             f"## {story['source']}",
             "",
             f"**[{sanitize_text(story['title'])}]({sanitize_url(story['url']) or '#'})**  ",
             story["ai_summary"],
             "",
-            "---",
-            "",
         ]
+        if i < len(stories) - 1:
+            lines += ["---", ""]
     return "\n".join(lines)
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -276,11 +279,14 @@ def build_post(stories: list[dict], date_str: str) -> str:
 # ─────────────────────────────────────────────────────────────────────────────
 
 def main():
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        raise SystemExit("ERROR: ANTHROPIC_API_KEY environment variable not set")
+    github_token = os.environ.get("GITHUB_TOKEN")
+    if not github_token:
+        raise SystemExit("ERROR: GITHUB_TOKEN environment variable not set")
 
-    client = anthropic.Anthropic(api_key=api_key)
+    client = OpenAI(
+        base_url="https://models.inference.ai.azure.com",
+        api_key=github_token,
+    )
     today  = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
     # Load previous URLs
@@ -326,11 +332,12 @@ def main():
         log.warning("No qualifying stories found today — skipping post generation.")
         return
 
-    # Generate Claude summaries
-    log.info("Generating summaries with Claude Haiku...")
+    # Generate summaries
+    model = os.environ.get("GITHUB_MODEL", "gpt-4o-mini")
+    log.info(f"Generating summaries with GitHub Models ({model})...")
     for i, story in enumerate(top_stories):
         log.info(f"  [{i+1}/{len(top_stories)}] {story['title'][:70]}...")
-        story["ai_summary"] = summarize_with_claude(story["title"], story["summary"], client)
+        story["ai_summary"] = summarize_with_llm(story["title"], story["summary"], client)
 
     # Write Jekyll post
     POSTS_DIR.mkdir(exist_ok=True)
