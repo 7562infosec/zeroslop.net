@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://zeroslop.net/sitemap.xml

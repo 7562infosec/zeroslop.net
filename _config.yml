@@ -15,7 +15,8 @@ github:
 social:
   name: ZeroSlop
   email: ""
-  links: []
+  links:
+    - https://github.com/7562infosec
 
 # --------------- Theme ----------------------------
 theme: jekyll-theme-chirpy
@@ -40,16 +41,6 @@ excerpt_separator: "<!--more-->"
 feed:
   path: feed.xml
 
-# --------------- Analytics (optional) -------------
-# google_analytics:
-#   id: G-XXXXXXXXXX
-
-# --------------- Comments (optional) --------------
-# comments:
-#   active: disqus
-#   disqus:
-#     shortname: zeroslop
-
 # --------------- Collections ----------------------
 collections:
   tabs:
@@ -64,6 +55,9 @@ defaults:
       layout: post
       comments: false
       toc: true
+      image:
+        path: /assets/img/avatar.png
+        alt: ZeroSlop.net
   - scope:
       path: "_tabs"
       type: tabs
