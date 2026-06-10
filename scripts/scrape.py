@@ -9,7 +9,7 @@ import os
 import json
 import re
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 import feedparser
@@ -60,7 +60,7 @@ def fix_encoding(text: str) -> str:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# RSS Feeds  (original 12 + innovation-focused additions)
+# RSS Feeds
 # ─────────────────────────────────────────────────────────────────────────────
 
 RSS_FEEDS = [
@@ -117,7 +117,6 @@ RSS_FEEDS = [
 # Keywords — positive / innovation framing
 # ─────────────────────────────────────────────────────────────────────────────
 
-# High-weight positive keywords (score += 3 each)
 POSITIVE_KEYWORDS = [
     "breakthrough", "launches", "released", "milestone", "innovation",
     "achievement", "solves", "improves", "enables", "discovers",
@@ -127,7 +126,6 @@ POSITIVE_KEYWORDS = [
     "generative ai", "multimodal", "agentic",
 ]
 
-# General AI / tech keywords (score += 1 each)
 GENERAL_KEYWORDS = [
     "artificial intelligence", "machine learning", "deep learning",
     "large language model", "llm", "foundation model",
@@ -138,7 +136,6 @@ GENERAL_KEYWORDS = [
     "research", "paper", "study",
 ]
 
-# Negative/slop filter — downrank these
 NEGATIVE_KEYWORDS = [
     "controversy", "lawsuit", "sued", "scandal", "misinformation",
     "hallucination", "bias", "discrimination", "layoffs", "fired",
@@ -159,8 +156,10 @@ def load_seen_urls() -> set:
 
 
 def save_seen_urls(seen: dict):
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=90)).strftime("%Y-%m-%d")
+    pruned = {url: date for url, date in seen.items() if date >= cutoff}
     with open(SEEN_FILE, "w") as f:
-        json.dump(seen, f, indent=2)
+        json.dump(pruned, f, indent=2)
 
 
 def score_story(title: str, summary: str) -> int:
@@ -237,7 +236,6 @@ def summarize_with_llm(title: str, summary: str, client: OpenAI) -> str:
             messages=[{"role": "user", "content": prompt}],
         )
         text = response.choices[0].message.content.strip()
-        # Strip any stray leading markdown headings
         text = re.sub(r'^#{1,6}\s+.*\n?', '', text, flags=re.MULTILINE).strip()
         return text
     except Exception as e:
@@ -253,6 +251,7 @@ def build_post(stories: list[dict], date_str: str) -> str:
         "layout: post",
         f'title: "ZeroSlop — {today_display}"',
         f"date: {date_str}",
+        f'description: "Top AI and technology breakthroughs for {today_display} — launches, innovations, and ideas worth knowing."',
         "categories: [daily-digest]",
         "tags: [ai, innovation, technology, breakthroughs]",
         "---",
@@ -289,14 +288,12 @@ def main():
     )
     today  = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
-    # Load previous URLs
     seen_data: dict = {}
     if SEEN_FILE.exists():
         with open(SEEN_FILE) as f:
             seen_data = json.load(f)
     seen_urls = set(seen_data.keys())
 
-    # Fetch all feeds
     log.info("Fetching RSS feeds...")
     all_stories: list[dict] = []
     for name, url in RSS_FEEDS:
@@ -306,7 +303,6 @@ def main():
 
     log.info(f"Total raw stories: {len(all_stories)}")
 
-    # Deduplicate by URL
     seen_this_run: set[str] = set()
     unique_stories: list[dict] = []
     for s in all_stories:
@@ -318,7 +314,6 @@ def main():
 
     log.info(f"After dedup: {len(unique_stories)} stories")
 
-    # Score and filter
     for s in unique_stories:
         s["score"] = score_story(s["title"], s["summary"])
 
@@ -332,21 +327,18 @@ def main():
         log.warning("No qualifying stories found today — skipping post generation.")
         return
 
-    # Generate summaries
     model = os.environ.get("GITHUB_MODEL", "gpt-4o-mini")
     log.info(f"Generating summaries with GitHub Models ({model})...")
     for i, story in enumerate(top_stories):
         log.info(f"  [{i+1}/{len(top_stories)}] {story['title'][:70]}...")
         story["ai_summary"] = summarize_with_llm(story["title"], story["summary"], client)
 
-    # Write Jekyll post
     POSTS_DIR.mkdir(exist_ok=True)
     post_path = POSTS_DIR / f"{today}-daily-digest.md"
     post_content = build_post(top_stories, today)
     post_path.write_text(post_content, encoding="utf-8")
     log.info(f"Post written: {post_path}")
 
-    # Update seen_urls
     for s in top_stories:
         seen_data[s["url"]] = today
     save_seen_urls(seen_data)
