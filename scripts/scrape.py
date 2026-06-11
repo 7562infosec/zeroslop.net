@@ -99,6 +99,7 @@ RSS_FEEDS = [
     # ── AI Lab Blogs ──────────────────────────────────────────────────────────────────
     ("OpenAI News",          "https://openai.com/news/rss.xml"),
     ("Anthropic News",       "https://www.anthropic.com/rss.xml"),
+    ("xAI Blog",             "https://x.ai/blog/rss.xml"),
     ("Google DeepMind",      "https://deepmind.google/blog/rss.xml"),
     ("Google AI Blog",       "https://blog.google/technology/ai/rss/"),
     ("Meta AI Blog",         "https://ai.meta.com/blog/rss/"),
