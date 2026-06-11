@@ -91,12 +91,20 @@ RSS_FEEDS = [
     ("MarkTechPost",         "https://www.marktechpost.com/feed/"),
     ("Hugging Face Blog",    "https://huggingface.co/blog/feed.xml"),
     ("arXiv CS.AI",          "https://rss.arxiv.org/rss/cs.AI"),
+    ("IEEE Spectrum AI",     "https://spectrum.ieee.org/feeds/blog/artificial-intelligence.rss"),
+    ("Science Daily AI",     "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml"),
+    ("The Gradient",         "https://thegradient.pub/rss/"),
+    ("Simon Willison",       "https://simonwillison.net/atom/everything/"),
 
     # ── AI Lab Blogs ──────────────────────────────────────────────────────────────────
     ("OpenAI News",          "https://openai.com/news/rss.xml"),
     ("Anthropic News",       "https://www.anthropic.com/rss.xml"),
     ("Google DeepMind",      "https://deepmind.google/blog/rss.xml"),
     ("Google AI Blog",       "https://blog.google/technology/ai/rss/"),
+    ("Meta AI Blog",         "https://ai.meta.com/blog/rss/"),
+    ("IBM Research",         "https://research.ibm.com/blog/feed"),
+    ("Apple ML Journal",     "https://machinelearning.apple.com/rss.xml"),
+    ("Microsoft Research",   "https://www.microsoft.com/en-us/research/feed/"),
 
     # ── Cybersecurity / AI Security ───────────────────────────────────────────────
     ("AWS Security",         "https://aws.amazon.com/blogs/security/feed/"),
