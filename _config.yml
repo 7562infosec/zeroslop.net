@@ -20,7 +20,7 @@ social:
 
 # --------------- Theme ----------------------------
 theme: jekyll-theme-chirpy
-theme_mode: dark   # dark | light  (omit for auto based on system pref)
+# theme_mode: dark  # omitted to allow system-preference auto-detection + sidebar toggle
 
 # --------------- Avatar ---------------------------
 avatar: /assets/img/avatar.png

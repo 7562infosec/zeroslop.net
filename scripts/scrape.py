@@ -252,6 +252,14 @@ def summarize_with_llm(title: str, summary: str, client: OpenAI) -> str:
         return summary[:300] + "..."
 
 
+def _post_description(stories: list[dict]) -> str:
+    snippets = []
+    for s in stories[:3]:
+        t = s["title"].strip()
+        snippets.append(t[:55].rsplit(" ", 1)[0] + "…" if len(t) > 55 else t)
+    return "Today: " + "; ".join(snippets)
+
+
 def build_post(stories: list[dict], date_str: str) -> str:
     d = datetime.strptime(date_str, "%Y-%m-%d")
     today_display = d.strftime("%B ") + str(d.day) + ", " + str(d.year)
@@ -260,7 +268,7 @@ def build_post(stories: list[dict], date_str: str) -> str:
         "layout: post",
         f'title: "ZeroSlop — {today_display}"',
         f"date: {date_str}",
-        f'description: "Top AI and technology breakthroughs for {today_display} — launches, innovations, and ideas worth knowing."',
+        f'description: "{_post_description(stories)}"',
         "categories: [daily-digest]",
         "tags: [ai, innovation, technology, breakthroughs]",
         "---",
@@ -272,9 +280,9 @@ def build_post(stories: list[dict], date_str: str) -> str:
     ]
     for i, story in enumerate(stories):
         lines += [
-            f"## {story['source']}",
+            f"### {i + 1}. [{sanitize_text(story['title'])}]({sanitize_url(story['url']) or '#'})",
+            f"*{story['source']}*",
             "",
-            f"**[{sanitize_text(story['title'])}]({sanitize_url(story['url']) or '#'})**  ",
             story["ai_summary"],
             "",
         ]
