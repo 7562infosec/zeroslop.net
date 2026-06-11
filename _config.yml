@@ -55,9 +55,6 @@ defaults:
       layout: post
       comments: false
       toc: true
-      image:
-        path: /assets/img/avatar.png
-        alt: ZeroSlop.net
   - scope:
       path: "_tabs"
       type: tabs
