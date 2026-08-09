@@ -1066,5 +1066,17 @@
   "https://aws.amazon.com/blogs/aws/runtime-instances-persistent-compute-for-production-ai-agents-on-amazon-bedrock-agentcore/": "2026-08-08",
   "https://aws.amazon.com/blogs/machine-learning/how-trends-automates-root-cause-analysis-with-amazon-bedrock/": "2026-08-08",
   "https://aws.amazon.com/blogs/machine-learning/control-agent-behaviors-and-cost-beyond-a-single-action-new-capabilities-in-amazon-bedrock-agentcore/": "2026-08-08",
-  "https://aws.amazon.com/blogs/machine-learning/llm-optimization-integration-for-amazon-sagemaker-python-sdk/": "2026-08-08"
+  "https://aws.amazon.com/blogs/machine-learning/llm-optimization-integration-for-amazon-sagemaker-python-sdk/": "2026-08-08",
+  "https://www.marktechpost.com/2026/08/08/pokee-ai-releases-pokee-isaac-28b-a-10m-token-context-agentic-model-built-to-run-inside-the-customer-boundary/": "2026-08-09",
+  "https://www.theguardian.com/technology/2026/aug/08/openai-astra-security-concerns": "2026-08-09",
+  "https://blogs.nvidia.com/blog/firebird-ai-factory-armenia-blackwell-rubin-dsx/": "2026-08-09",
+  "https://www.marktechpost.com/2026/08/08/meet-shepherd-an-open-source-python-substrate-that-lets-meta-agents-fork-replay-and-revert-any-agent-run/": "2026-08-09",
+  "https://hardware.slashdot.org/story/26/08/08/1940232/americas-first-grid-scale-sodium-ion-battery-plant-gets-its-first-big-test?utm_source=rss1.0mainlinkanon&utm_medium=feed": "2026-08-09",
+  "https://science.slashdot.org/story/26/08/08/0410218/before-and-after-views-of-spacex-rockets-moon-crash?utm_source=rss1.0mainlinkanon&utm_medium=feed": "2026-08-09",
+  "https://aws.amazon.com/blogs/machine-learning/how-mobileye-transformed-support-operations-using-amazon-bedrock-agentcore/": "2026-08-09",
+  "https://simonwillison.net/2026/Aug/5/third-party-cyber-evaluations/#atom-everything": "2026-08-09",
+  "https://simonwillison.net/2026/Aug/3/david-crawshaw/#atom-everything": "2026-08-09",
+  "https://openai.com/index/continuous-voice-interaction-with-gpt-live": "2026-08-09",
+  "https://deepmind.google/blog/weathernext-ai-model-achieves-breakthrough-in-forecasting-cyclones/": "2026-08-09",
+  "https://www.recordedfuture.com/blog/hugging-face-ai-safety": "2026-08-09"
 }
