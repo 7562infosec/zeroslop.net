@@ -3,6 +3,7 @@ layout: post
 title: "ZeroSlop — August 10, 2026"
 date: 2026-08-10
 description: "Today: Shape Your Feed: An LLM-based Agentic System for…; AgentPatch: Coarse-to-Fine Weak-Task Repair for…; Can MLLMs Decode the Creative Leap? Introducing C4 for…"
+slug: "daily-digest-2026-08-10"
 categories: [daily-digest]
 tags: [ai, innovation, technology, breakthroughs]
 ---

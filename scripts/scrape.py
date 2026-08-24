@@ -268,6 +268,7 @@ def build_post(stories: list[dict], date_str: str) -> str:
         "layout: post",
         f'title: "ZeroSlop — {today_display}"',
         f"date: {date_str}",
+        f'slug: "daily-digest-{date_str}"',
         f'description: "{_post_description(stories)}"',
         "categories: [daily-digest]",
         "tags: [ai, innovation, technology, breakthroughs]",
