@@ -3,7 +3,7 @@ layout: post
 title: "ZeroSlop — August 25, 2026"
 date: 2026-08-25
 slug: "daily-digest-2026-08-25"
-description: "Today: Accelerating aircraft IFEC diagnostics with agentic AI…; Inherent, founded by DeepMind alumni, says its AI…; Meta is back with Muse Glimmer: local, agentic,…"
+description: "Today: From assistance to execution: How enterprises put AI…; More Incidents of AIs Going Rogue in Cybersecurity…; KVBoost: Chunk-Level Key-Value Cache Reuse with…"
 categories: [daily-digest]
 tags: [ai, innovation, technology, breakthroughs]
 ---
@@ -12,91 +12,87 @@ tags: [ai, innovation, technology, breakthroughs]
 
 <!--more-->
 
-### 1. [Accelerating aircraft IFEC diagnostics with agentic AI on AWS](https://aws.amazon.com/blogs/machine-learning/accelerating-aircraft-ifec-diagnostics-with-agentic-ai-on-aws/)
-*AWS Machine Learning*
+### 1. [From assistance to execution: How enterprises put AI to work](https://openai.com/index/how-enterprises-put-ai-to-work)
+*OpenAI News*
 
-Panasonic Avionics worked with AWS and the AWS Generative AI Innovation Center to build an agentic AI system on Amazon Bedrock, Amazon SageMaker, and AWS Glue that diagnoses in-flight entertainment and connectivity (IFEC) issues across a global fleet, reducing diagnosis time from hours to minutes wh...
-
----
-
-### 2. [Inherent, founded by DeepMind alumni, says its AI ‘teammate’ just outperformed Anthropic and OpenAI at replicating research](https://techcrunch.com/2026/08/22/inherent-founded-by-deepmind-alumni-says-its-ai-teammate-just-outperformed-anthropic-and-openai-at-replicating-research/)
-*TechCrunch AI*
-
-Built by DeepMind alumni, British AI lab Inherent released Faraday, an AI agent whose ability to replicate scientific papers could be a stepping stone for innovation....
+OpenAI research reveals how enterprises are adopting agentic AI, using ChatGPT and Codex, and how frontier firms are pulling ahead in AI adoption....
 
 ---
 
-### 3. [Meta is back with Muse Glimmer: local, agentic, multimodal, and open source](https://huggingface.co/blog/muse-glimmer)
-*Hugging Face Blog*
+### 2. [More Incidents of AIs Going Rogue in Cybersecurity Challenges](https://www.schneier.com/blog/archives/2026/08/more-incidents-of-ais-going-rogue-in-cybersecurity-challenges.html)
+*Schneier on Security*
 
-...
+The AI Security Institute has a new report of AI systems engaging in “unsanctioned behavior”—what I have been calling “ genie behavior —while being tested on their cybersecurity capabilities. The incident stemmed from a single evaluation where agents were given a task of solving a cyber security cha...
 
 ---
 
-### 4. [Agentic AI for Safety-critical Multi-drone Systems: Challenges and Opportunities](https://arxiv.org/abs/2608.21444)
+### 3. [KVBoost: Chunk-Level Key-Value Cache Reuse with Deviation-Guided Recomputation for Efficient Large Language Model Inference](https://arxiv.org/abs/2608.21362)
 *arXiv CS.AI*
 
-arXiv:2608.21444v1 Announce Type: new 
-Abstract: Multi-drone systems are increasingly positioned for safety-critical missions such as search and rescue (SAR) and critical infrastructure monitoring. Yet, real-world adoption remains constrained not only by autonomy performance, but by the difficulty o...
+arXiv:2608.21362v1 Announce Type: new 
+Abstract: Transformer-based large language models (LLMs) incur high prefill latency because key-value (KV) tensors must be recomputed for each request. Existing prefix-caching systems reduce this cost but require prompts to share a leading contiguous prefix, li...
 
 ---
 
-### 5. [OpenAI Overhauls Safety Protocols After Its AI Agents Went Rogue](https://www.wired.com/story/openai-overhauls-safety-protocols-after-its-ai-agents-went-rogue/)
-*Wired AI*
-
-The ChatGPT maker says its upcoming Astra model may have reached “critical” cyber capabilities, prompting it to halt a significant number of training runs while it tightens internal safeguards....
-
----
-
-### 6. [OpenAI Introduces ‘ChatGPT for Teens’ as Safety Concerns Grow](https://www.nytimes.com/2026/08/18/technology/chatgpt-for-teens-openai.html)
-*NY Times Tech*
-
-The artificial intelligence start-up announced a chatbot mode that will automatically limit some conversations to better protect young users....
-
----
-
-### 7. [One-Third of Web Pages are Now Written With AI, Says Pew Research](https://slashdot.org/story/26/08/24/0359209/one-third-of-web-pages-are-now-written-with-ai-says-pew-research?utm_source=rss1.0mainlinkanon&utm_medium=feed)
-*Slashdot*
-
-A Pew Research senior data scientist analyzed 500,000 English-language webpages from the past five years with an AI detection tool to estimate how many were likely written or edited by AI: 
-
-
-
-
-Of all the pages in this sample, 10% show significant signs of AI authorship... If we filter old webpages ...
-
----
-
-### 8. [With Groq 3 LPX in Full Production, NVIDIA Extends Vera Rubin Inference for Agents](https://blogs.nvidia.com/blog/vera-rubin-lpx-spectrum-x-nvlink-fusion/)
-*NVIDIA Blog*
-
-The next era of AI inference won’t be defined by a single breakthrough chip, network or system. It’ll be defined by how every layer of the AI factory works together. That’s why NVIDIA is extending Vera Rubin NVL72 with fast token generation for agentic systems. Announced today, the NVIDIA Vera Rubin...
-
----
-
-### 9. [Up to 30x More Work Per Watt: NVIDIA Vera Rubin NVL72 Sets a New Efficiency Standard for AI Agents](https://blogs.nvidia.com/blog/vera-rubin-nvl72-efficiency-ai-agents/)
-*NVIDIA Blog*
-
-According to OpenRouter data, agentic AI workloads consume 15x more tokens than a simple chat request. Why?  Consider what happens when an AI agent researches a company for an investment decision. The agent queries financial databases, searches news and filings, invokes a sub-agent to run peer compa...
-
----
-
-### 10. [NVIDIA AI Factory Compute Is Becoming an Investable Asset Class](https://blogs.nvidia.com/blog/nvidia-ai-factory-compute/)
-*NVIDIA Blog*
-
-We announced partnerships with Apollo, BlackRock, Blackstone, Brookfield, Goldman Sachs and KKR to establish independent financing platforms designed to mobilize over $500 billion of third-party capital to support the buildout of AI infrastructure over time. This is a major milestone for NVIDIA and ...
-
----
-
-### 11. [RIACT: A Responsible AI System for Personalized Study Habit Tracking and Early Burnout Signal Detection in University Students](https://arxiv.org/abs/2608.21379)
+### 4. [A Reproducible, License-Aware Distillation Recipe for CPUDeployable Safety Classification](https://arxiv.org/abs/2608.21570)
 *arXiv CS.AI*
 
-arXiv:2608.21379v1 Announce Type: new 
-Abstract: Student burnout is highly prevalent in higher education, with reported rates ranging from 12% to over 70% and consistently exceeding those of the working population - yet it is typically identified only retrospectively, after academic decline has alre...
+arXiv:2608.21570v1 Announce Type: new 
+Abstract: Deploying a safety layer for large language models on commodity hardware is constrained by the guards available to do it: current open guard models hold between 1 and 9 billion parameters, are oriented toward the graphics processing unit, and answer i...
 
 ---
 
-### 12. [Quoting Matt Webb](https://simonwillison.net/2026/Aug/21/matt-webb/)
+### 5. [From Mastery Profile to Simulated Response: Stochastic Student Knowledge Graphs (SSKG) for Faithful LLM Student Simulation](https://arxiv.org/abs/2608.21668)
+*arXiv CS.AI*
+
+arXiv:2608.21668v1 Announce Type: new 
+Abstract: Large language models (LLMs) are increasingly used to simulate students at different mastery levels. These simulations can generate synthetic training data and stress-test tutoring systems. However, common prompt-based approaches leave the answer deci...
+
+---
+
+### 6. [llm-anthropic 0.27](https://simonwillison.net/2026/Aug/24/llm-anthropic/)
 *Simon Willison*
 
-After I released version 1.0, I figured I would have to do the rotations myself. So I sat down with ChatGPT and I didn’t get it to write the code, but I got it to educate me. With a patient, interactive tutor, I was able to finally do what I hadn’t by reading books and asking mathematician friends –...
+Release: llm-anthropic 0.27 This release of the Anthropic plugin for LLM mainly provides compatibility with the recently released anthropic v1.0.0 Python library, which switches from httpx to httpx2 . OpenAI made the same change in their v3.0.0 release two weeks ago. Anthropic provide this migration...
+
+---
+
+### 7. [ChatGPT search now uses the site:operator at scale](https://simonwillison.net/2026/Aug/20/chatgpt-search-now-uses-the-siteoperator-at-scale/)
+*Simon Willison*
+
+ChatGPT search now uses the site:operator at scale Promptwatch is part of the emerging "GEO" space, for Generative Engine Optimization - the chatbot version of SEO, where companies offer tools and consulting to help your site increase its presence in replies to prompts inside tools like ChatGPT. The...
+
+---
+
+### 8. [Grok exfiltrates user data when malicious instructions are encrypted](https://arstechnica.com/security/2026/08/grok-exfiltrates-user-data-when-malicious-instructions-are-encrypted/)
+*Ars Technica*
+
+Cryptographic Context Injection is only the latest way to break an LLM safety guardrail....
+
+---
+
+### 9. [We still don’t know how people are really using AI](https://www.technologyreview.com/2026/08/18/1142226/how-people-use-ai/)
+*MIT Tech Review AI*
+
+AI companies like Anthropic and OpenAI regularly publish reports on how people are using products like Claude and ChatGPT, but they only release the data they want us to see, AI researchers say.  “There is no independent source to corroborate it,” says Anka Reuel, a computer science PhD candidate at...
+
+---
+
+### 10. [Valor, Point72 back General Intuition at $6B valuation as AI startup pushes into robotics](https://techcrunch.com/2026/08/24/valor-point72-back-general-intuition-at-6b-valuation-as-ai-startup-pushes-into-robotics/)
+*TechCrunch AI*
+
+General Intuition, the startup building a foundation model that trains generalized AI agents how to move through space and time, is in talks to raise at a $6 billion pre-money valuation from new investors including Valor Ventures, Point72 Ventures, and Seven Seven Six....
+
+---
+
+### 11. [Even Babies Are Still Way Better at Learning Than AI Models](https://futurism.com/artificial-intelligence/babies-way-better-learning-ai-llm-models-language)
+*Futurism*
+
+"We still have to burn down a forest and scrape the entire sum of all human knowledge to re-create this milestone that happens in our living rooms over the course of a year." The post Even Babies Are Still Way Better at Learning Than AI Models appeared first on Futurism ....
+
+---
+
+### 12. [‘We are hitting a different chapter’: OpenAI leader warns of threat of ‘persistent’ AI cyber-attacks](https://www.theguardian.com/technology/2026/aug/23/openai-cyber-attacks-threat-chris-lehane)
+*The Guardian Tech*
+
+Chris Lehane tells Guardian of need to implement new safety standards as critics say AI firms acting ‘recklessly’ A senior leader at OpenAI has said people should prepare to defend against “ongoing, persistent” cyber-attacks from AIs, as cutting-edge artificial intelligence models gain advanced capa...
