@@ -26,7 +26,7 @@ REPO_ROOT   = SCRIPT_DIR.parent
 POSTS_DIR   = REPO_ROOT / "_posts"
 SEEN_FILE   = SCRIPT_DIR / "seen_urls.json"
 MAX_STORIES = 12   # stories per daily post
-MIN_SCORE   = 2    # minimum relevance score to include
+MIN_SCORE   = 1    # minimum relevance score to include
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 log = logging.getLogger(__name__)
