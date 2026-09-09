@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-zeroslop.net — Daily positive AI & innovation news scraper
+zeroslop.net â Daily positive AI & innovation news scraper
 Fetches stories from 40 RSS feeds, filters for breakthrough/innovation content,
 scores by relevance, generates upbeat summaries via GitHub Models, and writes a Jekyll post.
 """
@@ -17,9 +17,9 @@ from bs4 import BeautifulSoup
 from dateutil import parser as dateparser
 from openai import OpenAI
 
-# ─────────────────────────────────────────────────────────────────────────────
+# âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 # Configuration
-# ─────────────────────────────────────────────────────────────────────────────
+# âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
 SCRIPT_DIR = Path(__file__).parent
 REPO_ROOT   = SCRIPT_DIR.parent
@@ -27,6 +27,8 @@ POSTS_DIR   = REPO_ROOT / "_posts"
 SEEN_FILE   = SCRIPT_DIR / "seen_urls.json"
 MAX_STORIES = 12   # stories per daily post
 MIN_SCORE   = 1    # minimum relevance score to include
+LOOKBACK_HOURS = 48  # only consider entries published in the last N hours
+SEEN_URLS_MAX_AGE_DAYS = 7  # prune seen_urls older than this many days
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 log = logging.getLogger(__name__)
@@ -52,19 +54,19 @@ def sanitize_text(text: str) -> str:
 
 
 def fix_encoding(text: str) -> str:
-    """Fix UTF-8/Latin-1 double-encoding artifacts (e.g. Â· → ·)."""
+    """Fix UTF-8/Latin-1 double-encoding artifacts (e.g. ÃÂ· â Â·)."""
     try:
         return text.encode('latin-1').decode('utf-8')
     except (UnicodeEncodeError, UnicodeDecodeError):
         return text
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 # RSS Feeds
-# ─────────────────────────────────────────────────────────────────────────────
+# âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
 RSS_FEEDS = [
-    # ── Core Tech / AI ────────────────────────────────────────────────────────────
+    # ââ Core Tech / AI ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
     ("The Verge AI",         "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"),
     ("Ars Technica",         "https://feeds.arstechnica.com/arstechnica/technology-lab"),
     ("Wired AI",             "https://www.wired.com/feed/tag/ai/latest/rss"),
@@ -82,7 +84,7 @@ RSS_FEEDS = [
     ("Slashdot",             "https://rss.slashdot.org/Slashdot/slashdotMain"),
     ("It's FOSS",            "https://itsfoss.com/rss/"),
 
-    # ── Innovation / Startup / VC ─────────────────────────────────────────────────────
+    # ââ Innovation / Startup / VC âââââââââââââââââââââââââââââââââââââââââââââââââââââ
     ("a16z",                 "https://a16z.com/feed/"),
     ("NVIDIA Blog",          "https://blogs.nvidia.com/feed/"),
     ("Microsoft AI",         "https://blogs.microsoft.com/ai/feed/"),
@@ -96,7 +98,7 @@ RSS_FEEDS = [
     ("The Gradient",         "https://thegradient.pub/rss/"),
     ("Simon Willison",       "https://simonwillison.net/atom/everything/"),
 
-    # ── AI Lab Blogs ──────────────────────────────────────────────────────────────────
+    # ââ AI Lab Blogs ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
     ("OpenAI News",          "https://openai.com/news/rss.xml"),
     ("Anthropic News",       "https://www.anthropic.com/rss.xml"),
     ("xAI Blog",             "https://x.ai/blog/rss.xml"),
@@ -107,7 +109,7 @@ RSS_FEEDS = [
     ("Apple ML Journal",     "https://machinelearning.apple.com/rss.xml"),
     ("Microsoft Research",   "https://www.microsoft.com/en-us/research/feed/"),
 
-    # ── Cybersecurity / AI Security ───────────────────────────────────────────────
+    # ââ Cybersecurity / AI Security âââââââââââââââââââââââââââââââââââââââââââââââ
     ("AWS Security",         "https://aws.amazon.com/blogs/security/feed/"),
     ("CISA Alerts",          "https://us-cert.cisa.gov/ncas/alerts.xml"),
     ("Krebs on Security",    "http://krebsonsecurity.com/feed/"),
@@ -122,9 +124,9 @@ RSS_FEEDS = [
     ("The Intercept",        "https://theintercept.com/feed/?rss"),
 ]
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Keywords — positive / innovation framing
-# ─────────────────────────────────────────────────────────────────────────────
+# âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+# Keywords â positive / innovation framing
+# âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
 POSITIVE_KEYWORDS = [
     "breakthrough", "launches", "released", "milestone", "innovation",
@@ -152,9 +154,9 @@ NEGATIVE_KEYWORDS = [
     "deepfake", "scam", "fraud", "manipulation",
 ]
 
-# ─────────────────────────────────────────────────────────────────────────────
+# âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 # Helpers
-# ─────────────────────────────────────────────────────────────────────────────
+# âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
 def load_seen_urls() -> set:
     if SEEN_FILE.exists():
@@ -165,7 +167,7 @@ def load_seen_urls() -> set:
 
 
 def save_seen_urls(seen: dict):
-    cutoff = (datetime.now(timezone.utc) - timedelta(days=90)).strftime("%Y-%m-%d")
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=SEEN_URLS_MAX_AGE_DAYS)).strftime("%Y-%m-%d")
     pruned = {url: date for url, date in seen.items() if date >= cutoff}
     with open(SEEN_FILE, "w") as f:
         json.dump(pruned, f, indent=2)
@@ -196,6 +198,16 @@ def fetch_feed(name: str, url: str) -> list[dict]:
     try:
         feed = feedparser.parse(url, request_headers={"User-Agent": "zeroslop-bot/1.0"})
         for entry in feed.entries[:30]:
+            # Skip entries older than LOOKBACK_HOURS
+            pub_parsed = entry.get("published_parsed") or entry.get("updated_parsed")
+            if pub_parsed:
+                try:
+                    from datetime import datetime as _dt
+                    pub_dt = _dt(*pub_parsed[:6], tzinfo=timezone.utc)
+                    if _dt.now(timezone.utc) - pub_dt > timedelta(hours=LOOKBACK_HOURS):
+                        continue
+                except Exception:
+                    pass
             link  = entry.get("link", "")
             title = fix_encoding(entry.get("title", "").strip())
             raw_summary = (
@@ -227,10 +239,10 @@ def fetch_feed(name: str, url: str) -> list[dict]:
 
 def summarize_with_llm(title: str, summary: str, client: OpenAI) -> str:
     prompt = (
-        f"You are a tech journalist for zeroslop.net — a site that celebrates AI breakthroughs, "
+        f"You are a tech journalist for zeroslop.net â a site that celebrates AI breakthroughs, "
         f"innovation, and technology that makes a positive difference. "
-        f"Write a punchy 2–3 sentence summary of this story with an enthusiastic, forward-looking tone. "
-        f"Highlight what's exciting, what was achieved, or why it matters. No hype or filler — just clear, "
+        f"Write a punchy 2â3 sentence summary of this story with an enthusiastic, forward-looking tone. "
+        f"Highlight what's exciting, what was achieved, or why it matters. No hype or filler â just clear, "
         f"energetic writing that makes the reader want to learn more. "
         f"Do not begin your response with a Markdown heading.\n\n"
         f"Story title: {title}\n\n"
@@ -256,7 +268,7 @@ def _post_description(stories: list[dict]) -> str:
     snippets = []
     for s in stories[:3]:
         t = s["title"].strip()
-        snippets.append(t[:55].rsplit(" ", 1)[0] + "…" if len(t) > 55 else t)
+        snippets.append(t[:55].rsplit(" ", 1)[0] + "â¦" if len(t) > 55 else t)
     return "Today: " + "; ".join(snippets)
 
 
@@ -266,7 +278,7 @@ def build_post(stories: list[dict], date_str: str) -> str:
     lines = [
         "---",
         "layout: post",
-        f'title: "ZeroSlop — {today_display}"',
+        f'title: "ZeroSlop â {today_display}"',
         f"date: {date_str}",
         f'slug: "daily-digest-{date_str}"',
         f'description: "{_post_description(stories)}"',
@@ -274,7 +286,7 @@ def build_post(stories: list[dict], date_str: str) -> str:
         "tags: [ai, innovation, technology, breakthroughs]",
         "---",
         "",
-        f"*{len(stories)} stories worth knowing about today — AI breakthroughs, launches, and innovations making a difference.*",
+        f"*{len(stories)} stories worth knowing about today â AI breakthroughs, launches, and innovations making a difference.*",
         "",
         "<!--more-->",
         "",
@@ -291,9 +303,9 @@ def build_post(stories: list[dict], date_str: str) -> str:
             lines += ["---", ""]
     return "\n".join(lines)
 
-# ─────────────────────────────────────────────────────────────────────────────
+# âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 # Main
-# ─────────────────────────────────────────────────────────────────────────────
+# âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
 def main():
     github_token = os.environ.get("GITHUB_TOKEN")
@@ -336,13 +348,19 @@ def main():
         s["score"] = score_story(s["title"], s["summary"])
 
     candidates = [s for s in unique_stories if s["score"] >= MIN_SCORE]
+    if not candidates:
+        log.info("No stories met MIN_SCORE; relaxing to score >= 0")
+        candidates = [s for s in unique_stories if s["score"] >= 0]
+    if not candidates:
+        log.info("Still no stories; taking top scored entries as fallback")
+        candidates = sorted(unique_stories, key=lambda s: s["score"], reverse=True)
     candidates.sort(key=lambda s: s["score"], reverse=True)
     top_stories = candidates[:MAX_STORIES]
 
     log.info(f"Top stories selected: {len(top_stories)}")
 
     if not top_stories:
-        log.warning("No qualifying stories found today — skipping post generation.")
+        log.warning("No qualifying stories found today â skipping post generation.")
         return
 
     model = os.environ.get("GITHUB_MODEL", "gpt-4o-mini")
