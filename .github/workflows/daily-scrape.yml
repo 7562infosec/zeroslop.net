@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write            # needed to push new _posts/ files
+  actions: write              # needed to trigger the Pages deploy workflow
   models: read
 
 jobs:
@@ -42,16 +43,29 @@ jobs:
         run: python scripts/scrape.py
 
       - name: Commit and push new post
+        id: commit
         run: |
           git config user.name  "zeroslop-bot"
           git config user.email "bot@zeroslop.net"
           git add _posts/ scripts/seen_urls.json
           if git diff --cached --quiet; then
             echo "Nothing new to commit today."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
           else
             git commit -m "chore: daily digest $(date -u +%Y-%m-%d)"
             git push
+            echo "pushed=true" >> "$GITHUB_OUTPUT"
           fi
+
+      # Pushes made with the default GITHUB_TOKEN do not trigger other
+      # workflows' `on: push` events (GitHub's loop-prevention rule), so
+      # pages-deploy.yml would otherwise never see today's commit. Kick it
+      # off explicitly instead.
+      - name: Trigger Pages deploy
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages-deploy.yml --ref "${{ github.ref_name }}"
 
       - name: Notify on failure
         if: failure()
