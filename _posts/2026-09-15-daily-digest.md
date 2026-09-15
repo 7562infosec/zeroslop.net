@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "ZeroSlop â September 15, 2026"
+title: "ZeroSlop — September 15, 2026"
 date: 2026-09-15
 slug: "daily-digest-2026-09-15"
-description: "Today: Gaming takes a backseat as Nvidia overhauls the RTXâ¦; Vibe Patenting: Evaluating LLM Judges for Professionalâ¦; How User-AI Mistreatment Occurs and Matters inâ¦"
+description: "Today: Gaming takes a backseat as Nvidia overhauls the RTX…; Vibe Patenting: Evaluating LLM Judges for Professional…; How User-AI Mistreatment Occurs and Matters in…"
 categories: [daily-digest]
 tags: [ai, innovation, technology, breakthroughs]
 ---
 
-*12 stories worth knowing about today â AI breakthroughs, launches, and innovations making a difference.*
+*12 stories worth knowing about today — AI breakthroughs, launches, and innovations making a difference.*
 
 <!--more-->
 
